@@ -417,13 +417,16 @@ namespace g2o{
           << "\t cumTime= " << cumTime
           << "\t edges= " << _activeEdges.size();
         _algorithm->printVerbose(cerr);
-        cerr << endl;
+        cerr << "\t result= " << result << endl;
       }
       ++cjIterations; 
       postIteration(i);
     }
     if (result == OptimizationAlgorithm::Fail) {
       return 0;
+    }
+    if (result == OptimizationAlgorithm::Terminate) {
+      return -cjIterations;
     }
     return cjIterations;
   }

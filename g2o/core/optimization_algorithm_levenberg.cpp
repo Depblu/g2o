@@ -88,10 +88,11 @@ namespace g2o {
       _currentLambda = computeLambdaInit();
       _ni = 2;
     }
-
+    cout << "iteration:" << iteration << "_currentLambda:" << _currentLambda << endl;
     double rho=0;
-    int& qmax = _levenbergIterations;
-    qmax = 0;
+    //int& qmax = _levenbergIterations;
+    int qmax = 0;
+    _levenbergIterations = 0;
     do {
       _optimizer->push();
       if (globalStats) {
@@ -129,11 +130,15 @@ namespace g2o {
         // crop lambda between minimum and maximum factors
         alpha = (std::min)(alpha, _goodStepUpperScale);
         double scaleFactor = (std::max)(_goodStepLowerScale, alpha);
+
+        cout << "iteration:" << iteration << "scaleFactor:" << scaleFactor << endl;
         _currentLambda *= scaleFactor;
         _ni = 2;
         currentChi=tempChi;
         _optimizer->discardTop();
+        _levenbergIterations ++;
       } else {
+        cout << "iteration:" << iteration << "_ni:" << _ni << endl;
         _currentLambda*=_ni;
         _ni*=2;
         _optimizer->pop(); // restore the last state before trying to optimize
